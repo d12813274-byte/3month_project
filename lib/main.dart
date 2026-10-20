@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorSchemeSeed: const Color(0xFF007AFF),
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const HomePage(),
+      home: const MyHomePage(title:"Мои задачи"),
     );
   }
 }

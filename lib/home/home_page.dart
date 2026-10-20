@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_month3/add/add_page.dart';
+import 'package:flutter_month3/settings/settings_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyHomePageState extends State<MyHomePage> {
   final List<String> tasks = [];
 
   Future<void> _onAddTap() async {
@@ -22,16 +25,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _onSettingsTap() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const SettingsPage()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Мои задачи',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          widget.title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: _onSettingsTap,
+          ),
+        ],
       ),
       body: tasks.isEmpty
           ? const Center(child: Text('Задач пока нет'))
