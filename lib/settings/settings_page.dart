@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_month3/settings/settings_cubit.dart';
+
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -8,11 +11,12 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool isDark = false;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+   return BlocBuilder<SettingsCubit, bool>(
+    builder: (context, isDark) {
+      return
+    Scaffold(
       backgroundColor: isDark ? Colors.black87 : Colors.white,
       appBar: AppBar(
         title: Text("Настройки"),
@@ -31,14 +35,14 @@ class _SettingsPageState extends State<SettingsPage> {
             Switch(
               value: isDark,
               onChanged: (value) {
-                setState(() {
-                  isDark = value;
-                });
+                context.read<SettingsCubit>().toggleTheme(value);
               },
             ),
           ],
         ),
       ),
     );
+    },
+   );
   }
 }
