@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_month3/settings/settings_cubit.dart';
 
-
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -12,37 +11,70 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-   return BlocBuilder<SettingsCubit, bool>(
-    builder: (context, isDark) {
-      return
-    Scaffold(
-      backgroundColor: isDark ? Colors.black87 : Colors.white,
+    return Scaffold(
       appBar: AppBar(
-        title: Text("Настройки"),
-        centerTitle: true,
-        backgroundColor: isDark ? Colors.black87 : Colors.white,
-        foregroundColor: isDark ? Colors.white : Colors.black,
+        title: const Text("Настройки"),
       ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Тёмная тема",
-              style: TextStyle(color: isDark ? Colors.white : Colors.black),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 10,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.grey.shade300,
             ),
-            Switch(
-              value: isDark,
-              onChanged: (value) {
-                context.read<SettingsCubit>().toggleTheme(value);
-              },
-            ),
-          ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Тёмная тема",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    "Переключить тему приложения",
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+              BlocBuilder<SettingsCubit, bool>(
+                builder: (context, state) {
+                  return Switch(
+                    value: state,
+                    onChanged: (value) {
+                      context.read<SettingsCubit>().toggleTheme(value);
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
-    },
-   );
+
   }
 }
