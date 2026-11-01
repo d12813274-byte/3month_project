@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_month3/database/app_database.dart';
+import 'package:flutter_month3/database/app_repository.dart';
 import 'package:flutter_month3/home/home_page.dart';
 import 'package:flutter_month3/settings/settings_cubit.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_month3/onboarding/onboarding_page.dart';
+import 'package:hive/hive.dart';
+
+late final AppDatabase appDatabase;
+late final AppRepositoryIpml appRepositoryIpml;
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +22,10 @@ void main() async{
       child: MyApp(isOnboardingViewed: isOnboardingViewed),
     ),
   );
+  await Hive.initFlutter();
+  await Hive.openBox("todoBox");
+  
+  AppDatabase = AppDatabase();
 }
 
 class MyApp extends StatelessWidget {
@@ -24,6 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       debugShowCheckedModeBanner: false,
       title: 'To-Do List',
       theme: ThemeData(

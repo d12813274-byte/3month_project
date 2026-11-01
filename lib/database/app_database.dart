@@ -1,13 +1,36 @@
 import 'package:flutter_month3/database/todo.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class AppDatabase {
-  final List<Todo> _todoList = [
-    Todo(id: 1, title: "Купить телефон", isDone: false, createAt: "31.08.2026", deadline: "01.10.2026"),
-    Todo(id: 2, title: "Посмотреть фильм Дюна", isDone: false, createAt: "16.10.2026", deadline: "18.10.2026"),
-    Todo(id: 3, title: "Записаться в зал", isDone: true, createAt: "25.05.2026", deadline: "01.06.2026"),
-  ];
+  final Box box = Hive.box("todoBox");
+  List<Todo> _todoList = [];
+  
+
+  void saveTodos() {
+    final data = _todoList.map((todo) {
+      return {
+        "id": todo.id,
+        "title": todo.title,
+        "isDone": todo.isDone,
+        "createAt": todo.createAt,
+        "deadline": todo.deadline,
+      };
+    }).toList();
+    box.put("todos", data);
+  }
 
   List<Todo> getTodoList() {
+    final data = box.get("todos", defaultValue: []) as List;
+    _todoList = data.map((item) {
+      final map = Map<String, dynamic>.from(item);
+      return Todo(
+        id: map["id"],
+        title: map["title"],
+        isDone: map["isDone"],
+        createAt: map["createAt"],
+        deadline: map["deadline"],
+      );
+    }).toList();
     return _todoList;
   }
 }
