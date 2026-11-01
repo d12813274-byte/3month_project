@@ -29,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
             vertical: 10,
           ),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: Colors.grey.shade300,
@@ -45,7 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   Text(
                     "Тёмная тема",
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -54,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Text(
                     "Переключить тему приложения",
                     style: TextStyle(
-                      color: Colors.black54,
+                      color: Colors.grey,
                       fontSize: 11,
                     ),
                   ),

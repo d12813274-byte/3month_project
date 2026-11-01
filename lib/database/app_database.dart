@@ -4,6 +4,29 @@ import 'package:hive_flutter/hive_flutter.dart';
 class AppDatabase {
   final Box box = Hive.box("todoBox");
   List<Todo> _todoList = [];
+
+  AppDatabase() {
+  getTodoList();
+}
+void updateTodo(int id, String title, String deadline) {
+  for (final todo in _todoList) {
+    if (todo.id == id){
+      todo.title = title;
+      todo.deadline = deadline;
+    }
+  }
+  saveTodos();
+}
+
+void deleteTodo(int id) {
+  _todoList.removeWhere((todo) => todo.id == id);
+  saveTodos();
+}
+
+void addTodo(Todo todo) {
+  _todoList.insert(0, todo);
+  saveTodos();
+}
   
 
   void saveTodos() {

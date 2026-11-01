@@ -7,44 +7,57 @@ import 'package:flutter_month3/settings/settings_cubit.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_month3/onboarding/onboarding_page.dart';
-import 'package:hive/hive.dart';
+
 
 late final AppDatabase appDatabase;
-late final AppRepositoryIpml appRepositoryIpml;
+late final AppRepositoryImpl appRepository;
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
+   final prefs = await SharedPreferences.getInstance();
   final isOnboardingViewed = prefs.getBool("isOnboardingViewed") ?? false;
+
+  await Hive.initFlutter();
+  await Hive.openBox("todoBox");
+
+    appDatabase = AppDatabase();
+  appRepository = AppRepositoryImpl(db: appDatabase);
+
   runApp(
     BlocProvider(
+     
       create: (_) => SettingsCubit(),
       child: MyApp(isOnboardingViewed: isOnboardingViewed),
     ),
   );
-  await Hive.initFlutter();
-  await Hive.openBox("todoBox");
-  
-  AppDatabase = AppDatabase();
-}
+
+
+  }
+
+
 
 class MyApp extends StatelessWidget {
- final bool isOnboardingViewed;
- const MyApp({super.key, required this.isOnboardingViewed});
+  final bool isOnboardingViewed;
+  const MyApp({super.key, required this.isOnboardingViewed});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      
-      debugShowCheckedModeBanner: false,
-      title: 'To-Do List',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: const Color(0xFF007AFF),
-        scaffoldBackgroundColor: Colors.white,
-      ),
-     home: isOnboardingViewed 
-     ? const MyHomePage(title: "Мои задачи") : const OnboardingPage(),
+    return BlocBuilder<SettingsCubit, bool>(
+      builder: (context, isDark) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'To-Do List',
+          theme: ThemeData(
+            useMaterial3: true,
+            colorSchemeSeed: const Color(0xFF007AFF),
+          ),
+          darkTheme: ThemeData.dark(),
+          themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+          home: isOnboardingViewed
+              ? const MyHomePage(title: "Мои задачи")
+              : const OnboardingPage(),
+        );
+      },
     );
   }
 }

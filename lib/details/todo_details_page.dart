@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_month3/database/todo.dart';
+import 'package:flutter_month3/details/todo_details_cubit.dart';
 
 
 class TodoDetailsPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class TodoDetailsPage extends StatefulWidget {
 
 class _TodoDetailsPageState extends State<TodoDetailsPage>{
   final TextEditingController _controller = TextEditingController();
+  final TodoDetailsCubit _cubit = TodoDetailsCubit();
 @override 
 void initState() {
   super.initState();
@@ -20,8 +22,21 @@ void initState() {
 @override
 void dispose() {
   _controller.dispose();
+  _cubit.close();
   super.dispose();
 }
+void _onDeleteTap() {
+  _cubit.deleteTodo(widget.todo.id);
+  Navigator.of(context).pop();
+}
+void _onSaveTap() {
+  final title = _controller.text.trim();
+  if (title.isEmpty) return;
+
+  _cubit.updateTodo(widget.todo.id, title, widget.todo.deadline);
+  Navigator.of(context).pop();
+}
+
 @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +44,7 @@ void dispose() {
         title: Text("Редактировать задачу"),
         centerTitle: true,
         actions: [IconButton(
-          onPressed: () {}, 
+          onPressed: _onDeleteTap, 
         icon: Icon(Icons.delete, color: Colors.red,)),]
       ),
       body: Padding(padding: EdgeInsets.all(16),
@@ -39,7 +54,7 @@ void dispose() {
         TextField(controller: _controller,
         decoration: InputDecoration(
           filled: true,
-          fillColor: Color(0xFFF2F2F7),
+          fillColor: Colors.grey.withOpacity(0.2),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
@@ -50,13 +65,13 @@ void dispose() {
         Text("Дата выполнения"),
         SizedBox(height: 8), 
         Container(width: double.infinity, padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(color: Color(0xFFF2F2F7), borderRadius: 
+        decoration: BoxDecoration(color: Colors.grey.withOpacity(0.2), borderRadius: 
         BorderRadius.circular(10)),
         child: Text("14 сентября 2026"),
         ),
         Spacer(),
         SizedBox(width: double.infinity, child: ElevatedButton(
-          onPressed: () {}, 
+          onPressed: _onSaveTap, 
           child: Text("Сохранить измения"),
           ),
           ),

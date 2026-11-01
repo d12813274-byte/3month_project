@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_month3/main.dart';
+import 'package:flutter_month3/database/todo.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -9,12 +11,24 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   final TextEditingController _controller = TextEditingController();
+void _onSaveTap() {
+  final text = _controller.text.trim();
+       if (text.isEmpty) return;
 
-  void _onSaveTap() {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return;
-    Navigator.of(context).pop(text);
-  }
+  final now = DateTime.now();
+  
+  
+  appRepository.addTodo(
+    Todo(
+      id: now.millisecondsSinceEpoch,
+       title: text,
+        isDone: false,
+      createAt: "${now.day}.${now.month}.${now.year}",
+      deadline: "",
+    ),
+  );
+  Navigator.of(context).pop();
+}
 
   @override
   void dispose() {
@@ -28,7 +42,7 @@ class _AddPageState extends State<AddPage> {
       appBar: AppBar(
         title: const Text('Новая задача'),
         centerTitle: true,
-        backgroundColor: Colors.white,
+
       ),
       body: SafeArea(
         child: Padding(
@@ -40,10 +54,10 @@ class _AddPageState extends State<AddPage> {
               const SizedBox(height: 8),
               TextField(
                 controller: _controller,
-                decoration: InputDecoration(
-                  hintText: 'Введите название задачи',
-                  filled: true,
-                  fillColor: const Color(0xFFF2F2F7),
+          decoration: InputDecoration(
+           hintText: 'Введите название задачи',
+               filled: true,
+                  fillColor: Colors.grey.withOpacity(0.2),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -72,4 +86,11 @@ class _AddPageState extends State<AddPage> {
       ),
     );
   }
+
+
+
+
+
 }
+
+
