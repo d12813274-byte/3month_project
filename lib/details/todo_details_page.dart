@@ -30,11 +30,19 @@ void _onDeleteTap() {
   Navigator.of(context).pop();
 }
 void _onSaveTap() {
-  final title = _controller.text.trim();
-  if (title.isEmpty) return;
-
-  _cubit.updateTodo(widget.todo.id, title, widget.todo.deadline);
-  Navigator.of(context).pop();
+  try {
+    _cubit.updateTodo(
+      widget.todo.id,
+      _controller.text,
+      widget.todo.deadline,
+    );
+    Navigator.of(context).pop();
+  } catch (e) {
+    final message = e.toString().replaceFirst("Exception: ", "");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 }
 
 @override

@@ -8,7 +8,16 @@ class TodoDetailsCubit extends Cubit<void> {
     appRepository.deleteTodo(id);
   }
 
-  void updateTodo(int id, String title, String deadline) {
-    appRepository.updateTodo(id, title, deadline);
+void updateTodo(int id, String title, String deadline) {
+  final text = title.trim();
+
+  if (text.isEmpty) {
+    throw Exception("Название задачи не может быть пустым");
   }
+  if (text.length < 4) {
+    throw Exception("Название должно содержать минимум 4 символа");
+  }
+
+  appRepository.updateTodo(id, text, deadline);
+}
 }
