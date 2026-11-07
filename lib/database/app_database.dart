@@ -18,6 +18,15 @@ void updateTodo(int id, String title, String deadline) {
   saveTodos();
 }
 
+void toggleTodo(int id) {
+  for (final todo in _todoList) {
+    if (todo.id == id) {
+      todo.isDone = !todo.isDone;
+    }
+  }
+  saveTodos();
+}
+
 void deleteTodo(int id) {
   _todoList.removeWhere((todo) => todo.id == id);
   saveTodos();

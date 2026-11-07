@@ -6,6 +6,7 @@ abstract class AppRepository {
   void addTodo(Todo todo);
   void updateTodo(int id, String title, String deadline);
   void deleteTodo(int id);
+  void toggleTodo(int id);
 }
 
 class AppRepositoryImpl implements AppRepository {
@@ -31,5 +32,10 @@ class AppRepositoryImpl implements AppRepository {
   @override
   void deleteTodo(int id) {
     db.deleteTodo(id);
+  }
+
+  @override
+  void toggleTodo(int id) {
+    db.toggleTodo(id);
   }
 }
